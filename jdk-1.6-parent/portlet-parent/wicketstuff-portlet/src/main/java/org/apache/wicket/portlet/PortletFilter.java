@@ -78,6 +78,7 @@ public class PortletFilter extends WicketFilter {
 		super.init(isServlet, filterConfig);
 		this.filterConfig = filterConfig;
 
+		this.application.setRequestCycleProvider(new PortletRequestCycleProvider());
 		this.application.getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
 		this.application.getRequestCycleSettings().addResponseFilter(new PortletInvalidMarkupFilter());
 		this.application.getComponentInitializationListeners().add(new MarkupIdPrepender());

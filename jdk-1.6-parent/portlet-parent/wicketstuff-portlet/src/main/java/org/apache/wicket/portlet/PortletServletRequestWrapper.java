@@ -187,7 +187,11 @@ public class PortletServletRequestWrapper extends HttpServletRequestWrapper {
 		// nullifying these for now to prevent Wicket
 		// ServletWebRequest.getRelativePathPrefixToWicketHandler() going the
 		// wrong route
-		if ("javax.servlet.error.request_uri".equals(name) || "javax.servlet.forward.servlet_path".equals(name))
+    if ("javax.servlet.error.request_uri".equals(name) || 
+        "javax.servlet.forward.servlet_path".equals(name) ||
+        "javax.servlet.forward.request_uri".equals(name) || 
+        "javax.servlet.forward.context_path".equals(name) ||
+        "javax.servlet.forward.query_string".equals(name))
 			return null;
 		return super.getAttribute(name);
 	}

@@ -424,10 +424,17 @@ public class WicketPortlet extends GenericPortlet {
 
 					final boolean validWicketUrl = redirectLocation.startsWith(wicketFilterPath);
 					if (validWicketUrl) {
-						if (previousURL == null || previousURL != redirectLocation) {
+			      /**
+             * ZERATUL CHANGE
+             * ORIGINAL:
+             * if (previousURL == null || previousURL != redirectLocation) {
+             * ZERATUL:
+             * if (previousURL == null || previousURL.equals(redirectLocation)) {
+             */
+            if (previousURL == null || previousURL.equals(redirectLocation)) {
 							previousURL = wicketURL;
 							wicketURL = redirectLocation;
-							((RenderResponse) response).reset();
+							response.reset();
 							responseState.clear();
 							continue;
 						}

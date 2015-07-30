@@ -150,18 +150,38 @@ public class PortletServletRequestWrapper extends HttpServletRequestWrapper {
 		// retrieve the correct contextPath, requestURI and queryString
 		// if request is an include
 		if ((contextPath = (String) request.getAttribute("javax.servlet.include.context_path")) != null) {
-			requestURI = (String) request.getAttribute("javax.servlet.include.request_uri");
-			String wicketQueryString = (String) request.getAttribute("javax.servlet.include.query_string");
-			queryString = mergeQueryString(request.getParameterMap(), request.getQueryString(), wicketQueryString);
-		}
-		// else if request is a forward
-		else if ((contextPath = (String) request.getAttribute("javax.servlet.forward.context_path")) != null) {
-			requestURI = (String) request.getAttribute("javax.servlet.forward.request_uri");
-			String wicketQueryString = (String) request.getAttribute("javax.servlet.forward.query_string");
-			queryString = mergeQueryString(request.getParameterMap(), request.getQueryString(), wicketQueryString);
-		}
-		// else it is a normal request
-		else {
+		  /**
+		   * ZERATUL CHANGE
+		   * ZERATUL REMOVED THE mergeQueryString() CALL. Removing it resolves the stackoverflow error when clicking radio buttons inside reservation overview panel
+		   */
+		  // OLD CODE:
+//		        requestURI = (String) request.getAttribute("javax.servlet.include.request_uri");
+//		        String wicketQueryString = (String) request.getAttribute("javax.servlet.include.query_string");
+//		        queryString = mergeQueryString(request.getParameterMap(), request.getQueryString(), wicketQueryString);
+//		      }
+//		      // else if request is a forward
+//		      else if ((contextPath = (String) request.getAttribute("javax.servlet.forward.context_path")) != null) {
+//		        requestURI = (String) request.getAttribute("javax.servlet.forward.request_uri");
+//		        String wicketQueryString = (String) request.getAttribute("javax.servlet.forward.query_string");
+//		        queryString = mergeQueryString(request.getParameterMap(), request.getQueryString(), wicketQueryString);
+//		      }
+//		      // else it is a normal request
+//		      else {
+		  // ZERATUL CODE:      
+		        // request is an include
+		        requestURI = (String) request.getAttribute("javax.servlet.include.request_uri");
+		        queryString = (String) request.getAttribute("javax.servlet.include.query_string");
+		      } else if ((contextPath = (String) request.getAttribute("javax.servlet.forward.context_path")) != null)
+		      {
+		        // request is a forward
+		        requestURI = (String) request.getAttribute("javax.servlet.forward.request_uri");
+		        queryString = (String) request.getAttribute("javax.servlet.include.query_string");
+		      } else
+		      {
+		        // normal request
+		  /**
+		   * END OF ZERATUL CHANGE
+		   */ 
 			contextPath = request.getContextPath();
 			requestURI = request.getRequestURI();
 			queryString = request.getQueryString();
@@ -187,7 +207,11 @@ public class PortletServletRequestWrapper extends HttpServletRequestWrapper {
 		// nullifying these for now to prevent Wicket
 		// ServletWebRequest.getRelativePathPrefixToWicketHandler() going the
 		// wrong route
-		if ("javax.servlet.error.request_uri".equals(name) || "javax.servlet.forward.servlet_path".equals(name))
+    if ("javax.servlet.error.request_uri".equals(name) || 
+        "javax.servlet.forward.servlet_path".equals(name) ||
+        "javax.servlet.forward.request_uri".equals(name) || 
+        "javax.servlet.forward.context_path".equals(name) ||
+        "javax.servlet.forward.query_string".equals(name))
 			return null;
 		return super.getAttribute(name);
 	}

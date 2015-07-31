@@ -434,7 +434,7 @@ public class WicketPortlet extends GenericPortlet {
 					  if (previousURL == null || previousURL.equals(redirectLocation)) {
 							previousURL = wicketURL;
 							wicketURL = redirectLocation;
-							((RenderResponse) response).reset();
+							response.reset();
 							responseState.clear();
 							continue;
 						}
